@@ -1,0 +1,21 @@
+.control {
+    padding: 10px;
+    width: 80px;
+    height: 30px;
+    border: 1px solid teal;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control:hover {
+    background-color: blue;
+    color: aquamarine;
+}
+
+.control:hover,
+.control:focus {
+    scale: 1.5;
+}

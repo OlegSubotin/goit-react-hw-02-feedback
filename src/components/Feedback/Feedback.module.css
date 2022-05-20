@@ -1,0 +1,19 @@
+.wrapper {
+    padding: 30px;
+    width: 400px;
+    border: 2px solid teal;
+}
+
+.paragraph {
+    margin: 0;
+    font-size: 32px;
+}
+
+.list {
+    padding: 0;
+    margin: 20px 0;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
