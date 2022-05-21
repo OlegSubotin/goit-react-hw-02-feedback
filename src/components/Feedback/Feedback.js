@@ -1,39 +1,92 @@
 import React, { Component } from "react";
-import s from './Feedback.module.css';
-import Controls from "components/Controls";
+import Section from "components/Section";
+import FeedbackOptions from "components/FeedbackOptions";
 import Statistics from "components/Statistics";
+import Notification from "components/Notification";
 
 
 class Feedback extends Component{
-    // state
     state = {
         good: 0,
         neutral: 0,
-        bad: 0
+        bad: 0,
+        total: 0,
+        percentage: 0,
+    };
+
+    countTotalFeedback = () => {
+        this.setState(prevState => {
+            return {
+                total: prevState.good + prevState.neutral + prevState.bad,
+            }
+        });
+    };
+
+    countPositiveFeedbackPercentage = () => {
+        this.setState(prevState => {
+            return {
+               percentage: Math.round(prevState.good*100/prevState.total),
+           } 
+        })
     }
 
-    items = ['good', 'neutral', 'bad'];
+    handleGood = () => { 
+        this.setState(prevState => {
+            return {
+                good: prevState.good + 1,
+            };
+        });
+        this.countTotalFeedback();
+        this.countPositiveFeedbackPercentage();
+    };
 
-    prod = () => {
-        console.log('first');
-    }
+    handleNeutral = () => { 
+        this.setState(prevState => {
+            return {
+                neutral: prevState.neutral + 1,
+            };
+        });
+        this.countTotalFeedback();
+        this.countPositiveFeedbackPercentage();
+    };
 
-    // manip
+    handleBad = () => { 
+        this.setState(prevState => {
+            return {
+                bad: prevState.bad + 1,
+            };
+        });
+        this.countTotalFeedback();
+        this.countPositiveFeedbackPercentage();
+    };
 
-    // render
+
     render() {
+        const { good, neutral, bad, total, percentage } = this.state;
+        const { handleGood, handleNeutral, handleBad } = this;
         return (
-            <div className={s.wrapper}>
-                <p className={s.paragraph}>Please leave feedback</p>
-                <ul className={s.list}>
-                    <Controls
-                        options={this.items}
-                        onControlClick={this.prod}                             
+            <>
+                <Section title={"Please leave feedback"}>
+                    <FeedbackOptions
+                        handleGood={handleGood}
+                        handleNeutral={handleNeutral}
+                        handleBad={handleBad}
                     />
-                </ul>
-                <span className={s.paragraph}>Statistics</span>
-                <Statistics/>
-            </div>
+                </Section>
+                {total === 0
+                    ? <Notification />
+                    :<Section title={"Statistics"}>                    
+                    <Statistics
+                        good={good}
+                        neutral={neutral}
+                        bad={bad}
+                        total={total}
+                        percentage={percentage}
+                    />
+                    </Section>
+                }
+                
+            </>
         );
     };
 }
