@@ -21,52 +21,34 @@ class Feedback extends Component{
         return Math.round(this.state.good * 100 / this.countTotalFeedback());
     };
 
-    handleGood = () => { 
-        this.setState(prevState => {
-            return {
-                good: prevState.good + 1,
-            };
-        });
+    onLeaveFeedback = (evt) => {
+        const option = evt.target.textContent;
+        this.setState(prevState => ({
+            [option]: prevState[option] + 1,
+        })
+        );
     };
-
-    handleNeutral = () => { 
-        this.setState(prevState => {
-            return {
-                neutral: prevState.neutral + 1,
-            };
-        });
-    };
-
-    handleBad = () => { 
-        this.setState(prevState => {
-            return {
-                bad: prevState.bad + 1,
-            };
-        });
-    };
-
 
     render() {
         const { good, neutral, bad} = this.state;
-        const { handleGood, handleNeutral, handleBad, countTotalFeedback, countPositiveFeedbackPercentage } = this;
+        const {  onLeaveFeedback, countTotalFeedback, countPositiveFeedbackPercentage } = this;
         return (
             <>
                 <Section title={"Please leave feedback"}>
                     <FeedbackOptions
-                        handleGood={handleGood}
-                        handleNeutral={handleNeutral}
-                        handleBad={handleBad}
+                        options={Object.keys(this.state)}
+                        onLeaveFeedback={onLeaveFeedback}
                     />
                 </Section>
                 {countTotalFeedback()===0
-                    ? <Notification />
+                    ? <Notification message={"There is no feedback"} />
                     :<Section title={"Statistics"}>                    
                     <Statistics
                         good={good}
                         neutral={neutral}
                         bad={bad}
                         total={countTotalFeedback()}
-                        percentage={countPositiveFeedbackPercentage()}
+                        positivePercentage={countPositiveFeedbackPercentage()}
                     />
                     </Section>
                 }
